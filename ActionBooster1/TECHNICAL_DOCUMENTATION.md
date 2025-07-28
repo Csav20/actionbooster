@@ -82,5 +82,77 @@ curl -X POST http://localhost:5000/query -H 'Content-Type: application/json' -d 
 
 ---
 
+## Troubleshooting y Buenas Prácticas
+
+- **zRAM o swap no se activa:** Verifica permisos, configuración en `/etc/default/zramswap` y que el kernel soporte zstd/lz4.
+- **Portal web inaccesible:** Revisa logs en `agent_app.log`, asegúrate de que el puerto 8080 esté libre y el firewall permita el acceso.
+- **Bajo rendimiento:** Consulta el dashboard de Grafana, ajusta la configuración de swap/zRAM y verifica el uso de CPU/RAM.
+- **Problemas de clustering:** Asegúrate de que todos los nodos tengan conectividad y dependencias instaladas (K3s, MPI, Docker).
+- **Actualizaciones OTA:** Realiza backups antes de actualizar y valida la integridad de los scripts.
+
+---
+
+## Visualizaciones y Ejemplos Avanzados
+
+- ![Panel de control web](docs/captura_portal.png)
+- ![Dashboard de métricas](docs/captura_grafana.png)
+- **Integración avanzada:**
+  - Despliegue en clúster híbrido (ARM + x86) con balanceo automático.
+  - Integración con Home Assistant para automatización local.
+  - Ejecución de modelos de voz (Whisper) y visión (Stable Diffusion) en paralelo.
+
+---
+
+## Ejemplos y Casos Prácticos de Uso
+
+### 1. Aceleración de IA en Edge (Orange Pi 5+)
+- Despliega modelos DeepSeek 7B y Qwen 7B en local para análisis de texto y generación de código sin conexión a la nube.
+- Uso típico: laboratorio educativo, makerspace, oficina remota.
+
+### 2. Clúster Híbrido ARM + x86
+- Une varias Orange Pi y PCs x86 en un clúster con balanceo automático de tareas.
+- Uso típico: simulaciones científicas, procesamiento de datos en edge, IA distribuida.
+
+### 3. Automatización Domótica con IA
+- Integra ActionBooster con Home Assistant para crear reglas inteligentes (ej: control de luces por voz, análisis de imágenes de cámaras locales).
+- Uso típico: hogar inteligente, edificios automatizados.
+
+### 4. Servidor Personal de IA y Desarrollo
+- Usa el portal web para consultas multi-modelo, edición de código en VS Code online y respaldo automático.
+- Uso típico: desarrolladores, estudiantes, equipos de I+D.
+
+### 5. Procesamiento de Voz y Visión
+- Ejecuta modelos Whisper (voz a texto) y Stable Diffusion (generación de imágenes) en paralelo, aprovechando la distribución de recursos.
+- Uso típico: kioskos interactivos, asistentes virtuales, arte generativo.
+
+### 6. Recuperación y Respaldo Inteligente
+- Programa backups automáticos y restauración rápida ante fallos, con scripts integrados.
+- Uso típico: pymes, laboratorios, entornos críticos.
+
+### 7. Edge AI para IoT Industrial
+- Despliega ActionBooster en gateways industriales para análisis predictivo, mantenimiento y control local.
+- Uso típico: fábricas, monitoreo de sensores, logística.
+
+---
+
+## Versiones y Dependencias
+
+- Python >= 3.10
+- llama.cpp >= 0.2.0
+- Flask >= 2.2
+- Prometheus >= 2.50, Grafana >= 10
+- UFW, zRAM, Docker (opcional para clustering)
+
+---
+
+## Créditos y Licencia
+
+- Desarrollador principal: Claudio Abarca PhD(c)
+- Comunidad open source y testers
+- Licencia: MIT
+- Basado en: llama.cpp, Flask, Prometheus, Grafana, UFW, zRAM
+
+---
+
 ## Contacto y Soporte
-Para soporte, contribuciones o dudas técnicas, contacta a: actionbooster@dev.local
+Para soporte, contribuciones o dudas técnicas, contacta a: claudio.abarca@actionbooster.ai o únete al Discord de la comunidad.
