@@ -164,8 +164,161 @@ graph TD
 
 ---
 
+## Flujos Interactivos Visuales
+
+### 1. Arranque y Autodetección
+```mermaid
+sequenceDiagram
+    participant U as Usuario
+    participant OP as Orange Pi
+    participant R as Red Local
+    U->>OP: Conecta y enciende
+    OP->>OP: Autodetección hardware/OS
+    OP->>R: Anuncio mDNS (actionbooster.local)
+    U->>R: Busca dispositivo en red
+    U->>OP: Accede vía web/SSH
+```
+
+### 2. Carga y Ejecución de Modelos IA
+```mermaid
+sequenceDiagram
+    participant U as Usuario
+    participant OP as Orange Pi
+    participant HF as HuggingFace
+    U->>OP: Accede por SSH
+    OP->>HF: Descarga modelos GGUF
+    OP->>OP: Verifica y almacena modelos
+    U->>OP: Inicia servicios IA
+    OP->>U: Portal web y API disponibles
+```
+
+### 3. Consulta y Respuesta IA
+```mermaid
+sequenceDiagram
+    participant U as Usuario
+    participant OP as Orange Pi
+    participant M as Modelos IA
+    U->>OP: Envía prompt vía portal/API
+    OP->>M: Orquesta consulta multi-modelo
+    M-->>OP: Respuestas y resumen
+    OP->>U: Muestra resultado en web/API
+```
+
+### 4. Mantenimiento y Backup
+```mermaid
+sequenceDiagram
+    participant U as Usuario
+    participant OP as Orange Pi
+    U->>OP: Ejecuta backup.sh/restore.sh
+    OP->>OP: Realiza respaldo/restauración
+    OP->>U: Notifica éxito o error
+```
+
+---
+
+## Diagramas de Arquitectura y Flujo
+
+### Diagrama General de Arquitectura
+```mermaid
+graph LR
+    A[Usuario] -->|Web/SSH| B[Orange Pi ActionBooster]
+    B -->|API| C[Modelos IA locales]
+    B -->|Portal Web| D[Frontend HTML/VS Code]
+    B -->|Monitorización| E[Grafana/Prometheus]
+    B -->|Backup/Restore| F[SSD/NVMe]
+    B -->|Red Local| G[Otros dispositivos/cluster]
+```
+
+### Diagrama de Servicios y Scripts
+```mermaid
+graph TD
+    subgraph Orange Pi
+        A1[autoconfig.py] --> A2[agent_app.py]
+        A1 --> A3[parallel_api.py]
+        A2 --> A4[task_distributor.py]
+        A2 --> A5[monitor.sh]
+        A2 --> A6[backup.sh/restore.sh]
+        A2 --> A7[config_zram.sh]
+        A2 --> A8[config_firewall.sh]
+        A2 --> A9[generate_selfsigned_tls.sh]
+        A2 --> A10[autostart.sh]
+    end
+    A2 --> B1[Portal Web]
+    A3 --> B2[API Distribución]
+    A2 --> B3[VS Code Online]
+```
+
+### Diagrama de Red y Seguridad
+```mermaid
+graph LR
+    U[Usuario] -- HTTPS/SSH --> O[Orange Pi]
+    O -- Firewall --> F[Internet]
+    O -- mDNS --> R[Red Local]
+    O -- Backup --> S[SSD/NVMe]
+    O -- Monitorización --> M[Grafana/Prometheus]
+```
+
+---
+
 ## Recursos
 - [Documentación oficial Orange Pi](http://www.orangepi.org/downloadresources/)
 - [Guía ActionBooster](./HARDWARE_GUIDE.md)
 - [Documentación técnica](./TECHNICAL_DOCUMENTATION.md)
 - [Proceso de carga y arranque](./ORANGE_PI_BOOT_PROCESS.md)
+
+---
+
+## Preguntas Frecuentes (FAQ)
+
+**¿Qué hago si no veo el dispositivo en la red?**
+- Verifica cables, alimentación y que el router soporte mDNS.
+- Usa la IP directa si `actionbooster.local` no responde.
+- Prueba con `arp -a` o apps de escaneo de red para encontrar la IP.
+
+**¿Es seguro exponer el portal web a Internet?**
+- No se recomienda sin firewall y TLS. Usa VPN o túneles seguros para acceso remoto.
+
+**¿Cómo optimizo el rendimiento?**
+- Prioriza zRAM sobre swap en NVMe para menor latencia.
+- Mantén el sistema actualizado y monitoriza recursos con Grafana.
+
+**¿Puedo restaurar el sistema si falla?**
+- Sí, usa los scripts de backup y restauración incluidos.
+
+---
+
+## Consejos de Seguridad y Buenas Prácticas
+
+- Cambia la contraseña por defecto del usuario `orangepi` tras el primer acceso.
+- Habilita el firewall (`config_firewall.sh`) y revisa puertos abiertos.
+- Realiza backups antes de actualizar modelos o el sistema.
+- No expongas puertos críticos (5000, 8080) sin protección.
+- Usa TLS (certificados autofirmados o de Let's Encrypt) para el portal y la API.
+
+---
+
+## Troubleshooting Rápido
+
+- **No aparece en la red:**
+  - Revisa cables, alimentación y router.
+  - Prueba con otro puerto USB o fuente de poder.
+- **Portal web no carga:**
+  - Verifica logs en `agent_app.log` y que el puerto 8080 esté libre.
+  - Asegúrate de que los servicios estén activos (`systemctl status ai-agent`).
+- **Modelos IA no cargan:**
+  - Verifica rutas y permisos de los archivos GGUF.
+  - Revisa espacio libre en SSD/NVMe.
+- **Bajo rendimiento:**
+  - Consulta el dashboard de Grafana y ajusta swap/zRAM.
+- **Problemas de red/mDNS:**
+  - Instala/activa `avahi-daemon` para soporte mDNS en Linux.
+
+---
+
+## Recomendaciones Finales
+
+- Mantén el sistema y scripts actualizados desde el repositorio oficial.
+- Documenta cambios y personalizaciones para futuras restauraciones.
+- Participa en la comunidad para soporte y mejoras.
+
+---
