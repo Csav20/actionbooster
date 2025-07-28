@@ -1,0 +1,14 @@
+# Checklist de Validación ActionBooster1
+
+- [ ] Firewall activo y configurado
+- [ ] Certificado TLS autofirmado generado
+- [ ] Monitorización con Grafana/Prometheus operativa
+- [ ] Modelos GGUF descargados y en ruta correcta
+- [ ] Scripts de autoinicio y zRAM integrados
+- [ ] Servicios systemd activos y en arranque
+- [ ] Portal web y API accesibles
+- [ ] Backup/restauración funcionales
+- [ ] Pruebas funcionales realizadas
+- [ ] Documentación y tutoriales actualizados
+- [ ] Validación en hardware alternativo
+- [ ] Validación en casos límite (sin DHCP, solo CLI, red bloqueada)

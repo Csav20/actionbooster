@@ -1,0 +1,13 @@
+[Unit]
+Description=ActionBooster1 Autostart
+After=network.target
+
+[Service]
+Type=simple
+User=macbookm1
+WorkingDirectory=/Users/macbookm1/Documents/ActionBooster1
+ExecStart=/Users/macbookm1/Documents/ActionBooster1/autostart.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

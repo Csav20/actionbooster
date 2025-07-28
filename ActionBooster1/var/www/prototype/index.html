@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ActionBooster AI Hub</title>
+    <style>
+        :root {
+            --deepseek-color: #3498db;
+            --qwen-color: #e74c3c;
+            --kimi-color: #2ecc71;
+        }
+        .model-response {
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        #deepseek-response { border-left: 4px solid var(--deepseek-color); }
+        #qwen-response { border-left: 4px solid var(--qwen-color); }
+        #kimi-response { border-left: 4px solid var(--kimi-color); }
+        #summary { background: #f8f9fa; padding: 15px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>ActionBooster AI Hub</h1>
+    <div class="card">
+        <h2>VS Code Online</h2>
+        <a href="http://TU_IP:8080" target="_blank">
+            <button>Launch Code Editor</button>
+        </a>
+    </div>
+    <div class="card">
+        <h2>Consulta Multi-Modelo</h2>
+        <input type="text" id="prompt" placeholder="Escribe tu consulta..." style="width: 70%;">
+        <button onclick="queryAI()">Consultar</button>
+        <div id="responses">
+            <div class="model-response" id="deepseek-response">
+                <h3>DeepSeek (Código)</h3>
+                <pre id="deepseek-output">Esperando consulta...</pre>
+            </div>
+            <div class="model-response" id="qwen-response">
+                <h3>Qwen (Ciencia)</h3>
+                <pre id="qwen-output">Esperando consulta...</pre>
+            </div>
+            <div class="model-response" id="kimi-response">
+                <h3>Kimi (Resumen)</h3>
+                <pre id="kimi-output">Esperando consulta...</pre>
+            </div>
+            <div id="summary">
+                <h3>Resumen Integrado</h3>
+                <p id="summary-output">-</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function queryAI() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt) return;
+            document.querySelectorAll('pre').forEach(el => {
+                el.textContent = "Procesando...";
+            });
+            try {
+                const response = await fetch('http://localhost:5000/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await response.json();
+                document.getElementById('deepseek-output').textContent = data.models.deepseek;
+                document.getElementById('qwen-output').textContent = data.models.qwen;
+                document.getElementById('kimi-output').textContent = data.models.kimi;
+                document.getElementById('summary-output').textContent = data.summary;
+            } catch (error) {
+                document.getElementById('summary-output').textContent = `Error: ${error.message}`;
+            }
+        }
+        document.getElementById('prompt').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') queryAI();
+        });
+    </script>
+</body>
+</html>

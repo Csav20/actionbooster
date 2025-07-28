@@ -1,0 +1,14 @@
+[Unit]
+Description=ActionBooster AI Agent
+After=network.target
+
+[Service]
+Type=simple
+User=macbookm1
+WorkingDirectory=/Users/macbookm1/Documents/ActionBooster1
+ExecStart=/Users/macbookm1/Documents/ActionBooster1/ai_env/bin/python /Users/macbookm1/Documents/ActionBooster1/agent_app.py
+Restart=always
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
